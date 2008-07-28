@@ -1,0 +1,21 @@
+          ------
+          Maven EMMA plugin
+          ------
+          Anna Nieslony, Roger Butenuth
+          ------
+          March 2006
+
+Summary
+
+  The Maven EMMA plugin gives you coverage reports for your JUnit tests
+  executed by the surefire-plugin.
+
+* Components
+
+  The plugin consists of two Mojos: 
+
+    * instr: Calls EMMA to instrument the classes. This Mojo is bound to
+      "process-classes" phase.
+      
+    * report: Bound to the "site" phase in the site generation lifecycle.
+      Generates the EMMA reports.

@@ -1,0 +1,71 @@
+          ------
+          Maven EMMA plugin
+          ------
+          Anna Nieslony, Roger Butenuth
+          ------
+          March 2006
+
+Usage
+
+* Configuration in the build section
+
+  The EMMA plugin has to be activated in the build section, the "instr" goal
+  must be executed.
+  
+  It is important to execute the tests in a seperate jvm because EMMA dumps
+  the coverage on termination of the JVM. The tests need a different 
+  classes directory to load the instrumented classes. (The classes are not
+  instrumented in place because we don't want intrumented classes in the
+  released jars.)
+
++------------------------------------------------+
+  <build>
+    <plugins>     
+      <plugin>      
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-emma-plugin</artifactId>
+        <version>0.5</version>
+        <inherited>true</inherited>          
+        <executions>
+          <execution>                
+            <goals>
+              <goal>instr</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <inherited>true</inherited>
+        <configuration>
+          <forkMode>once</forkMode>
+          <reportFormat>xml</reportFormat>
+          <classesDirectory>${project.build.directory}/emma-classes</classesDirectory>    
+        </configuration>        
+      </plugin>
+    </plugins>
+  </build>
++------------------------------------------------+
+
+* Configuration in the reporting section
+
+  There is not much to configure for the reports: Just activate them.
+
++------------------------------------------------+
+  <reporting>    
+    <plugins>  
+      <plugin>      
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-emma-plugin</artifactId>
+        <version>0.5</version>
+          <inherited>true</inherited>          
+      </plugin>
+      <plugin> 
+        <groupId>org.sonatype.maven.plugin</groupId> 
+        <artifactId>surefire-report-maven-plugin</artifactId> 
+        <inherited>true</inherited>
+      </plugin>       
+    </plugins>      
+  </reporting>  
++------------------------------------------------+
