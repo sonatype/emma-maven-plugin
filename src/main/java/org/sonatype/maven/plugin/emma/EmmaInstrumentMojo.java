@@ -7,10 +7,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,7 +37,7 @@ import org.sonatype.maven.plugin.emma.task.InstrumentTask;
 
 /**
  * Offline class instrumentor.
- * 
+ *
  * @author <a href="mailto:alexandre.roman@gmail.com">Alexandre ROMAN</a>
  * @goal instrument
  * @requiresDependencyResolution test
@@ -47,42 +47,42 @@ public class EmmaInstrumentMojo
 {
     /**
      * Indicates whether the metadata should be merged into the destination <code>metadataFile</code>, if any.
-     * 
+     *
      * @parameter expression="${emma.merge}" default-value="true"
      */
     protected boolean merge;
 
     /**
      * Instrumentation filters.
-     * 
+     *
      * @parameter
      */
     protected String[] filters;
 
     /**
      * Specifies the instrumentation paths to use.
-     * 
+     *
      * @parameter
      */
     protected File[] instrumentationPaths;
 
     /**
      * Location to store class coverage metadata.
-     * 
+     *
      * @parameter expression="${emma.metadataFile}" default-value="${project.build.directory}/coverage.em"
      */
     protected File metadataFile;
 
     /**
      * Extra parameters for JVM used by EMMA.
-     * 
+     *
      * @parameter expression="${emma.jvmParameters}" default-value="-Xmx256m"
      */
     protected String jvmParameters;
 
     /**
      * Artifact factory.
-     * 
+     *
      * @component
      */
     private ArtifactFactory factory;
@@ -144,14 +144,11 @@ public class EmmaInstrumentMojo
 
         // prepare test execution by adding EMMA dependencies
         addEmmaDependenciesToTestClasspath();
-
-        final File classesDir = new File( outputDirectory, "classes" );
-        project.getBuild().setOutputDirectory( classesDir.getPath() );
     }
 
     /**
      * Add EMMA dependency to project test classpath. When tests are executed, EMMA runtime dependency is required.
-     * 
+     *
      * @throws MojoExecutionException if EMMA dependency could not be added
      */
     private void addEmmaDependenciesToTestClasspath()
@@ -182,7 +179,7 @@ public class EmmaInstrumentMojo
 
     /**
      * Convert an artifact to a test artifact.
-     * 
+     *
      * @param artifact to convert
      * @return an artifact with a test scope
      */
