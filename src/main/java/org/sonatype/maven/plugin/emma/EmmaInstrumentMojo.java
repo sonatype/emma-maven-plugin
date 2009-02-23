@@ -33,7 +33,11 @@ import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.sonatype.maven.plugin.emma.task.InstrumentTask;
+
+import com.vladium.emma.IAppConstants;
+import com.vladium.emma.instr.InstrProcessor;
+import com.vladium.emma.instr.InstrProcessor.OutMode;
+import com.vladium.util.XProperties;
 
 /**
  * Offline class instrumentor.
@@ -106,16 +110,17 @@ public class EmmaInstrumentMojo
     protected void doExecute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( getLog().isDebugEnabled() )
+        String[] paths = new String[instrumentationPaths.length];
+
+        if ( instrumentationPaths != null )
         {
-            if ( instrumentationPaths != null )
+            getLog().debug( "Instrumentation path:" );
+            for ( int i = 0; i < instrumentationPaths.length; ++i )
             {
-                getLog().debug( "Instrumentation path:" );
-                for ( int i = 0; i < instrumentationPaths.length; ++i )
-                {
-                    getLog().debug( " o " + instrumentationPaths[i].getAbsolutePath() );
-                }
+                getLog().debug( " o " + instrumentationPaths[i].getAbsolutePath() );
+                paths[i] = instrumentationPaths[i].getAbsolutePath();
             }
+        }
 
             if ( filters != null && filters.length > 0 )
             {
@@ -125,22 +130,22 @@ public class EmmaInstrumentMojo
                     getLog().debug( " o " + filters[i] );
                 }
             }
-        }
 
-        final InstrumentTask task = new InstrumentTask();
-        task.setPluginClasspath( pluginClasspath );
-        task.setLog( getLog() );
-        task.setOutputDirectory( outputDirectory );
-        task.setFilters( filters );
-        task.setPropertyFile( propertyFile );
-        task.setVerbose( verbose );
-        task.setInstrumentationPaths( instrumentationPaths );
-        task.setMerge( merge );
-        task.setMetadataFile( metadataFile );
-        task.setJvmParameters( jvmParameters );
+        InstrProcessor processor = InstrProcessor.create();
+        processor.setAppName( IAppConstants.APP_NAME );
+
+        processor.setInstrPath(paths , true );
+        processor.setInclExclFilter( filters );
+        processor.setOutMode( OutMode.OUT_MODE_FULLCOPY );
+        processor.setInstrOutDir( outputDirectory.getAbsolutePath() );
+        processor.setMetaOutFile( metadataFile.getAbsolutePath() );
+        processor.setMetaOutMerge( new Boolean( merge ) );
+        XProperties properties = new XProperties();
+        processor.setPropertyOverrides( properties );
 
         getLog().info( "Instrumenting classes with EMMA" );
-        task.execute();
+        processor.run();
+
 
         // prepare test execution by adding EMMA dependencies
         addEmmaDependenciesToTestClasspath();
