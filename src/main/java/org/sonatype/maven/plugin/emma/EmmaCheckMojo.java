@@ -45,14 +45,17 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
-import org.sonatype.maven.plugin.emma.task.ReportTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.vladium.emma.IAppConstants;
+import com.vladium.emma.report.ReportProcessor;
+import com.vladium.util.XProperties;
+
 /**
  * Check last intrumentation results.
- * 
+ *
  * @author <a href="mailto:alexandre.roman@gmail.com">Alexandre ROMAN</a>
  * @goal check
  * @execute phase="test" lifecycle="emma"
@@ -71,7 +74,7 @@ public class EmmaCheckMojo extends AbstractEmmaMojo
 
     /**
      * Location to XML coverage file.
-     * 
+     *
      * @parameter expression="${emma.coverageFile}"
      *            default-value="${project.reporting.outputDirectory}/emma/coverage.xml"
      * @required
@@ -80,14 +83,14 @@ public class EmmaCheckMojo extends AbstractEmmaMojo
 
     /**
      * Check configuration.
-     * 
+     *
      * @parameter
      */
     protected CheckConfiguration check;
 
     /**
      * Location to store class coverage metadata.
-     * 
+     *
      * @parameter expression="${emma.metadataFile}" default-value="${project.build.directory}/coverage.em"
      * @required
      */
@@ -95,14 +98,14 @@ public class EmmaCheckMojo extends AbstractEmmaMojo
 
     /**
      * Class coverage data files.
-     * 
+     *
      * @parameter
      */
     protected File[] dataFiles;
 
     /**
      * Location to store EMMA generated resources.
-     * 
+     *
      * @parameter default-value="${project.reporting.outputDirectory}/emma"
      * @required
      */
@@ -110,7 +113,7 @@ public class EmmaCheckMojo extends AbstractEmmaMojo
 
     /**
      * Extra parameters for JVM used by EMMA.
-     * 
+     *
      * @parameter expression="${emma.jvmParameters}" default-value="-Xmx256m"
      */
     protected String jvmParameters;
@@ -404,17 +407,23 @@ public class EmmaCheckMojo extends AbstractEmmaMojo
 
     private File generateReport() throws MojoExecutionException
     {
-        final ReportTask task = new ReportTask();
-        task.setPluginClasspath( pluginClasspath );
-        task.setVerbose( verbose );
-        task.setMetadataFile( metadataFile );
-        task.setDataFiles( dataFiles );
-        task.setOutputDirectory( outputDirectory );
-        task.setLog( getLog() );
-        task.setJvmParameters( jvmParameters );
-        task.setGenerateOnlyXml( true );
+        String[] dataPath = new String[dataFiles.length + 1];
+        for ( int i = 0; i < dataFiles.length; i++ )
+        {
+            dataPath[i] = dataFiles[i].getAbsolutePath();
+        }
+        dataPath[dataFiles.length] = metadataFile.getAbsolutePath();
 
-        task.execute();
+        ReportProcessor reporter = ReportProcessor.create();
+        reporter.setAppName( IAppConstants.APP_NAME );
+        reporter.setDataPath( dataPath );
+        reporter.setSourcePath( new String[0] );
+        reporter.setReportTypes( new String[] { "xml" } );
+        XProperties properties = new XProperties();
+        properties.setProperty( "report.html.out.file", new File( outputDirectory, "index.html" ).getAbsolutePath() );
+        properties.setProperty( "report.xml.out.file", new File( outputDirectory, "coverage.xml" ).getAbsolutePath() );
+        properties.setProperty( "report.txt.out.file", new File( outputDirectory, "coverage.txt" ).getAbsolutePath() );
+        reporter.setPropertyOverrides( properties );
 
         return new File( outputDirectory, "coverage.xml" );
     }
