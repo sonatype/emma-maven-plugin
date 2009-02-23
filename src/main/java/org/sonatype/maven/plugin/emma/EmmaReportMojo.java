@@ -31,11 +31,9 @@ import java.util.ResourceBundle;
 import java.util.WeakHashMap;
 
 import org.apache.maven.doxia.siterenderer.Renderer;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
-import org.sonatype.maven.plugin.emma.task.ReportTask;
 
 import com.vladium.emma.IAppConstants;
 import com.vladium.emma.report.ReportProcessor;
@@ -226,20 +224,6 @@ public class EmmaReportMojo
         reporter.setPropertyOverrides( properties );
 
         reporter.run();
-
-        final ReportTask task = new ReportTask();
-        task.setMetrics( metrics );
-        task.setSort( sort );
-        task.setJvmParameters( jvmParameters );
-
-        try
-        {
-            task.execute();
-        }
-        catch ( MojoExecutionException e )
-        {
-            throw new MavenReportException( "Failed to generate EMMA report", e );
-        }
     }
 
     protected String getOutputDirectory()
