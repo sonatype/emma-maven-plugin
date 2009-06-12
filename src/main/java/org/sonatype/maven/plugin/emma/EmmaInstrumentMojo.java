@@ -91,6 +91,7 @@ public class EmmaInstrumentMojo
      */
     private ArtifactFactory factory;
 
+    @Override
     protected void checkParameters()
         throws MojoExecutionException, MojoFailureException
     {
@@ -107,6 +108,7 @@ public class EmmaInstrumentMojo
         }
     }
 
+    @Override
     protected void doExecute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -122,19 +124,19 @@ public class EmmaInstrumentMojo
             }
         }
 
-            if ( filters != null && filters.length > 0 )
+        if ( filters != null && filters.length > 0 )
+        {
+            getLog().debug( "Filters:" );
+            for ( int i = 0; i < filters.length; ++i )
             {
-                getLog().debug( "Filters:" );
-                for ( int i = 0; i < filters.length; ++i )
-                {
-                    getLog().debug( " o " + filters[i] );
-                }
+                getLog().debug( " o " + filters[i] );
             }
+        }
 
         InstrProcessor processor = InstrProcessor.create();
         processor.setAppName( IAppConstants.APP_NAME );
 
-        processor.setInstrPath(paths , true );
+        processor.setInstrPath( paths, true );
         processor.setInclExclFilter( filters );
         processor.setOutMode( OutMode.OUT_MODE_FULLCOPY );
         processor.setInstrOutDir( outputDirectory.getAbsolutePath() );
@@ -145,7 +147,6 @@ public class EmmaInstrumentMojo
 
         getLog().info( "Instrumenting classes with EMMA" );
         processor.run();
-
 
         // prepare test execution by adding EMMA dependencies
         addEmmaDependenciesToTestClasspath();
