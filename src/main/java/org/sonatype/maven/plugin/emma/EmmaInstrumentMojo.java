@@ -24,7 +24,7 @@
 package org.sonatype.maven.plugin.emma;
 
 import java.io.File;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -174,7 +174,7 @@ public class EmmaInstrumentMojo
         emmaArtifact = artifactScopeToTest( emmaArtifact );
 
         // add EMMA to project dependencies
-        final Set deps = new HashSet();
+        final Set deps = new LinkedHashSet();
         if ( project.getDependencyArtifacts() != null )
         {
             deps.addAll( project.getDependencyArtifacts() );
