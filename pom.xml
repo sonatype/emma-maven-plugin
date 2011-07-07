@@ -6,7 +6,7 @@
 		<version>5</version>
 	</parent>
 
-    <groupId>org.sonatype.maven.plugin</groupId>
+	<groupId>org.sonatype.maven.plugin</groupId>
 	<artifactId>emma-maven-plugin</artifactId>
 	<version>1.3-SNAPSHOT</version>
 	<inceptionYear>2007</inceptionYear>
@@ -150,9 +150,9 @@
 									**/it03/b/pom.xml
 								</pomExclude>
 								<!-- it05 is supposed to fail -->
-                                <pomExclude>
-                                    **/it05/pom.xml
-                                </pomExclude>
+								<pomExclude>
+									**/it05/pom.xml
+								</pomExclude>
 							</pomExcludes>
 							<postBuildHookScript>
 								verify.bsh
