@@ -152,9 +152,9 @@ public class EmmaReportMojo
     protected List pluginClasspath;
 
     /**
-     * Reports format to generated (coma separated list)
+     * Reports format to generated (comma separated list)
      *
-     * @parameter expression="${emma.repports}" default-value="html"
+     * @parameter expression="${emma.report.formats}" default-value="html"
      */
     protected String formats;
 
