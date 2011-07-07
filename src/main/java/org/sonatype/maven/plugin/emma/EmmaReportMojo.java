@@ -152,6 +152,13 @@ public class EmmaReportMojo
     protected List pluginClasspath;
 
     /**
+     * Reports format to generated (coma separated list)
+     *
+     * @parameter expression="${emma.repports}" default-value="html"
+     */
+    protected String formats;
+
+    /**
      * Site renderer.
      *
      * @component
@@ -216,7 +223,7 @@ public class EmmaReportMojo
         reporter.setAppName( IAppConstants.APP_NAME );
         reporter.setDataPath( dataPath );
         reporter.setSourcePath( sources );
-        reporter.setReportTypes( new String[] { "html" } );
+        reporter.setReportTypes( formats.split( "," ) );
         XProperties properties = new XProperties();
         properties.setProperty( "report.html.out.file", new File( outputDirectory, "index.html" ).getAbsolutePath() );
         properties.setProperty( "report.xml.out.file", new File( outputDirectory, "coverage.xml" ).getAbsolutePath() );
