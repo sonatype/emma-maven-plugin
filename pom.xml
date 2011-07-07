@@ -129,6 +129,9 @@
 							<projectsDirectory>
 								src/it
 							</projectsDirectory>
+							<cloneProjectsTo>
+								${project.build.directory}/it
+							</cloneProjectsTo>
 							<goals>
 								<goal>site</goal>
 								<goal>verify</goal>
@@ -163,6 +166,7 @@
 								<id>integration-test</id>
 								<phase>integration-test</phase>
 								<goals>
+									<goal>install</goal>
 									<goal>run</goal>
 								</goals>
 							</execution>

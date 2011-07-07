@@ -424,6 +424,7 @@ public class EmmaCheckMojo extends AbstractEmmaMojo
         properties.setProperty( "report.xml.out.file", new File( outputDirectory, "coverage.xml" ).getAbsolutePath() );
         properties.setProperty( "report.txt.out.file", new File( outputDirectory, "coverage.txt" ).getAbsolutePath() );
         reporter.setPropertyOverrides( properties );
+        reporter.run();
 
         return new File( outputDirectory, "coverage.xml" );
     }
