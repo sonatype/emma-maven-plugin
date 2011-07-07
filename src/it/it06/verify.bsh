@@ -1,0 +1,19 @@
+File emmaIndex = new File(basedir, "target/site/emma/index.html");
+if(!emmaIndex.exists() || emmaIndex.length() == 0) {
+	System.out.println("Missing 'index.html'");
+	return false;
+}
+
+File emmaXmlReport = new File(basedir, "target/site/emma/coverage.xml");
+if(!emmaXmlReport.exists() || emmaXmlReport.length() == 0) {
+	System.out.println("Missing 'coverage.xml'");
+	return false;
+}
+
+File emmaTxtReport = new File(basedir, "target/site/emma/coverage.txt");
+if(!emmaTxtReport.exists() || emmaTxtReport.length() == 0) {
+	System.out.println("Missing 'coverage.txt'");
+	return false;
+}
+
+return true;
