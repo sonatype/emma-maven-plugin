@@ -26,20 +26,66 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.sonatype.maven.plugin</groupId>
-				<artifactId>emma-maven-plugin</artifactId>
-				<configuration>
-					<filters>
-						<filter>+hello.*</filter>
-						<filter>+byebye.*</filter>
-					</filters>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
+	<profiles>
+		<profile>
+			<id>maven-2</id>
+			<activation>
+				<file>
+					<!-- only recognized by Maven 3.x (see MNG-2363) -->
+					<missing>${basedir}</missing>
+				</file>
+			</activation>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.sonatype.maven.plugin</groupId>
+						<artifactId>emma-maven-plugin</artifactId>
+						<version>@project.version@</version>
+						<configuration>
+							<filters>
+								<filter>+hello.*</filter>
+								<filter>+byebye.*</filter>
+							</filters>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+		<profile>
+			<id>maven-3</id>
+			<activation>
+				<file>
+					<!-- only recognized by Maven 3.x (see MNG-2363) -->
+					<exists>${basedir}</exists>
+				</file>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<artifactId>maven-site-plugin</artifactId>
+							<version>3.0-beta-3</version>
+							<configuration>
+								<reportPlugins>
+									<plugin>
+										<groupId>org.sonatype.maven.plugin</groupId>
+										<artifactId>emma-maven-plugin</artifactId>
+										<version>@project.version@</version>
+										<configuration>
+											<filters>
+												<filter>+hello.*</filter>
+												<filter>+byebye.*</filter>
+											</filters>
+										</configuration>
+									</plugin>
+								</reportPlugins>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 	<modules>
 		<module>a</module>
 		<module>b</module>
