@@ -216,7 +216,7 @@ public class EmmaReportMojo
         reporter.setAppName( IAppConstants.APP_NAME );
         reporter.setDataPath( dataPath );
         reporter.setSourcePath( sources );
-        reporter.setReportTypes( new String[] { "html" } );
+        reporter.setReportTypes( new String[] { "html", "xml", "txt" } );
         XProperties properties = new XProperties();
         properties.setProperty( "report.html.out.file", new File( outputDirectory, "index.html" ).getAbsolutePath() );
         properties.setProperty( "report.xml.out.file", new File( outputDirectory, "coverage.xml" ).getAbsolutePath() );
